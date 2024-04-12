@@ -1,3 +1,3 @@
 #include "TsubasamusuUnrealEditor.h"
 
-IMPLEMENT_GAME_MODULE(FTsubasamusuUnrealEditor, TsubasamusuUnrealEditor);
+IMPLEMENT_MODULE(FTsubasamusuUnrealEditor, TsubasamusuUnrealEditor);
