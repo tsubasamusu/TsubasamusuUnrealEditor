@@ -14,4 +14,6 @@ public:
 
 private:
 	void SetupEditorSettings();
+	void SetupCommentSettings();
+	void SetupRegionAndLanguageSettings();
 };

@@ -15,40 +15,41 @@ void UTsubasamusuUnrealEdEngine::Init(IEngineLoop* InEngineLoop)
 
 void UTsubasamusuUnrealEdEngine::SetupEditorSettings()
 {
-	//自動保存を無効化
 	GetMutableDefault<UEditorLoadingSavingSettings>()->bAutoSaveEnable = false;
 
-	//アセットエディタをメインウィンドウで開くように設定
 	GetMutableDefault<UEditorStyleSettings>()->AssetEditorOpenLocation = EAssetEditorOpenLocation::MainWindow;
 
+	SetupCommentSettings();
+
+	SetupRegionAndLanguageSettings();
+}
+
+void UTsubasamusuUnrealEdEngine::SetupCommentSettings()
+{
+	UGraphEditorSettings* GraphEditorSettings = GetMutableDefault<UGraphEditorSettings>();
+
+	GraphEditorSettings->bShowCommentBubbleWhenZoomedOut = true;
+
+	GraphEditorSettings->DefaultCommentNodeTitleColor = FLinearColor::Black;
+}
+
+void UTsubasamusuUnrealEdEngine::SetupRegionAndLanguageSettings()
+{
+	TWeakObjectPtr<UInternationalizationSettingsModel> InternationalizationSettingsModel = GetMutableDefault<UInternationalizationSettingsModel>();
+
 	{
-		UGraphEditorSettings* GraphEditorSettings = GetMutableDefault<UGraphEditorSettings>();
+		FInternationalization* Internationalization = &FInternationalization::Get();
 
-		//ズームアウト時にコメントの吹き出しを表示するように設定
-		GraphEditorSettings->bShowCommentBubbleWhenZoomedOut = true;
+		FCulturePtr CulturePtr = Internationalization->GetCulture(TEXT("en"));
 
-		//コメントの初期色を黒色に設定
-		GraphEditorSettings->DefaultCommentNodeTitleColor = FLinearColor::Black;
+		InternationalizationSettingsModel->SetEditorLanguage(CulturePtr->GetName());
+
+		InternationalizationSettingsModel->SetEditorLocale(CulturePtr->GetName());
 	}
 
-	//エディタの言語を英語に設定
-	{
-		TWeakObjectPtr<UInternationalizationSettingsModel> InternationalizationSettingsModel = GetMutableDefault<UInternationalizationSettingsModel>();
+	InternationalizationSettingsModel->SetShouldUseLocalizedNodeAndPinNames(false);
 
-		{
-			FInternationalization* Internationalization = &FInternationalization::Get();
+	InternationalizationSettingsModel->SetShouldUseLocalizedNumericInput(false);
 
-			FCulturePtr CulturePtr = Internationalization->GetCulture(TEXT("en"));
-
-			InternationalizationSettingsModel->SetEditorLanguage(CulturePtr->GetName());
-
-			InternationalizationSettingsModel->SetEditorLocale(CulturePtr->GetName());
-		}
-
-		InternationalizationSettingsModel->SetShouldUseLocalizedNodeAndPinNames(false);
-
-		InternationalizationSettingsModel->SetShouldUseLocalizedNumericInput(false);
-
-		InternationalizationSettingsModel->SetShouldUseLocalizedPropertyNames(false);
-	}
+	InternationalizationSettingsModel->SetShouldUseLocalizedPropertyNames(false);
 }
