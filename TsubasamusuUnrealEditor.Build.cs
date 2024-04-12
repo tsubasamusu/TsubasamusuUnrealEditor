@@ -19,7 +19,8 @@ public class TsubasamusuUnrealEditor : ModuleRules
         PrivateDependencyModuleNames.AddRange(new string[]
             {
                 "UnrealEd",
-                "GraphEditor"
+                "GraphEditor",
+                "InternationalizationSettings"
             });
     }
 }

@@ -1,6 +1,10 @@
 #include "TsubasamusuUnrealEdEngine.h"
 #include "Settings/EditorStyleSettings.h"
 #include "GraphEditorSettings.h"
+#include "InternationalizationSettingsModel.h"
+#include "Internationalization/CulturePointer.h"
+#include "Internationalization/Internationalization.h"
+#include "Internationalization/Culture.h"
 
 void UTsubasamusuUnrealEdEngine::Init(IEngineLoop* InEngineLoop)
 {
@@ -25,5 +29,26 @@ void UTsubasamusuUnrealEdEngine::SetupEditorSettings()
 
 		//コメントの初期色を黒色に設定
 		GraphEditorSettings->DefaultCommentNodeTitleColor = FLinearColor::Black;
+	}
+
+	//エディタの言語を英語に設定
+	{
+		TWeakObjectPtr<UInternationalizationSettingsModel> InternationalizationSettingsModel = GetMutableDefault<UInternationalizationSettingsModel>();
+
+		{
+			FInternationalization* Internationalization = &FInternationalization::Get();
+
+			FCulturePtr CulturePtr = Internationalization->GetCulture(TEXT("en"));
+
+			InternationalizationSettingsModel->SetEditorLanguage(CulturePtr->GetName());
+
+			InternationalizationSettingsModel->SetEditorLocale(CulturePtr->GetName());
+		}
+
+		InternationalizationSettingsModel->SetShouldUseLocalizedNodeAndPinNames(false);
+
+		InternationalizationSettingsModel->SetShouldUseLocalizedNumericInput(false);
+
+		InternationalizationSettingsModel->SetShouldUseLocalizedPropertyNames(false);
 	}
 }
