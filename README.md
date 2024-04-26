@@ -26,3 +26,23 @@
 # 使用方法
 ## ソースコードのインポート
 ### 手順1
+「**Releases**」から最新版（**Latest**）の「**Source code**」をダウンロードする。
+### 手順2
+ダウンロードした ZIP ファイルを展開して UE プロジェクトのルートディレクトリにある「**Source**」フォルダ内に移動させる。
+## コーディング
+### 手順3
+「**{プロジェクト名}Editor.Target.cs**」に ``ExtraModuleNames.Add("TsubasamusuUnrealEditor");`` を追加する。
+### 手順4
+UE プロジェクトの「**.uproject**」ファイル内の「**Modules**」に以下のコードを追加する。
+```json
+{
+	"Name": "TsubasamusuUnrealEditor",
+	"Type": "Editor",
+	"LoadingPhase": "Default"
+}
+```
+## デバッグ
+### 手順5
+UE エディタを閉じている状態でビルドし、ビルド完了後に UE エディタを開く。
+### 手順6
+「**Edit** ＞ **Editor Preferences...**」で該当設定が変わっている事を確認する。
