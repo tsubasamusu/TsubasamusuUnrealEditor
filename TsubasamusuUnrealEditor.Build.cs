@@ -12,13 +12,14 @@ public class TsubasamusuUnrealEditor : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "Slate",
-                "SlateCore",
-                "Sample"
+                "SlateCore"
             });
 
         PrivateDependencyModuleNames.AddRange(new string[]
             {
-                "UnrealEd"
+                "UnrealEd",
+                "GraphEditor",
+                "InternationalizationSettings"
             });
     }
 }
