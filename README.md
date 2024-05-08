@@ -1,39 +1,39 @@
-# ‹@”\
-## ƒGƒfƒBƒ^İ’è‚Ì©“®‰»
-ˆÈ‰º‚Ìİ’è€–Ú‚ğ©“®‚Å•ÏX‚µ‚Ü‚·B
-D‚İ‚É‡‚í‚È‚¢İ’è‚ª‚ ‚éê‡‚Í ``UTsubasamusuUnrealEdEngine::SetupEditorSettings()`` ‚ğ•ÒW‚µ‚Ä’¸‚¯‚ê‚Î‚Æv‚¢‚Ü‚·B
+# æ©Ÿèƒ½
+## ã‚¨ãƒ‡ã‚£ã‚¿è¨­å®šã®è‡ªå‹•åŒ–
+ä»¥ä¸‹ã®è¨­å®šé …ç›®ã‚’è‡ªå‹•ã§å¤‰æ›´ã—ã¾ã™ã€‚
+å¥½ã¿ã«åˆã‚ãªã„è¨­å®šãŒã‚ã‚‹å ´åˆã¯ ``UTsubasamusuUnrealEdEngine::SetupEditorSettings()`` ã‚’ç·¨é›†ã—ã¦é ‚ã‘ã‚Œã°ã¨æ€ã„ã¾ã™ã€‚
 
 - General
 	- Appearance
 		- User Interface
-			- **_Asset Editor Open Location_**F**_Main Window_**
+			- **_Asset Editor Open Location_**ï¼š**_Main Window_**
 	- Loading & Saving
 		- Auto Save
-			- **_Enable AutoSave_**F**_false_**
+			- **_Enable AutoSave_**ï¼š**_false_**
 	- Region & Language
 		- Internationalization
-			- **_Editor Language_**F**_English_**
-			- **_Editpr Locale_**F**_English_**
-			- **_Use Localized Numeric Input_**F**_false_**
-			- **_Use Localized Property Names_**F**_false_**
-			- **_Use Localized Graph Editor Node and Pin Names_**F**_false_**
+			- **_Editor Language_**ï¼š**_English_**
+			- **_Editpr Locale_**ï¼š**_English_**
+			- **_Use Localized Numeric Input_**ï¼š**_false_**
+			- **_Use Localized Property Names_**ï¼š**_false_**
+			- **_Use Localized Graph Editor Node and Pin Names_**ï¼š**_false_**
 - Content Editors
 	- Graph Editors
 		- Node Title Colors
-			- **_Default Comment Node Title Color_**F**_black_**
+			- **_Default Comment Node Title Color_**ï¼š**_black_**
 		- Comment Nodes
-			- **_Show Comment Bubble when Zoomed Out_**F**_true_**
-# g—p•û–@
-## ƒ\[ƒXƒR[ƒh‚ÌƒCƒ“ƒ|[ƒg
-### è‡1
-u**Releases**v‚©‚çÅV”Åi**Latest**j‚Ìu**Source code**v‚ğƒ_ƒEƒ“ƒ[ƒh‚·‚éB
-### è‡2
-ƒ_ƒEƒ“ƒ[ƒh‚µ‚½ ZIP ƒtƒ@ƒCƒ‹‚ğ“WŠJ‚µ‚Ä UE ƒvƒƒWƒFƒNƒg‚Ìƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ‚É‚ ‚éu**Source**vƒtƒHƒ‹ƒ_“à‚ÉˆÚ“®‚³‚¹‚éB
-## ƒR[ƒfƒBƒ“ƒO
-### è‡3
-u**{ƒvƒƒWƒFƒNƒg–¼}Editor.Target.cs**v‚É ``ExtraModuleNames.Add("TsubasamusuUnrealEditor");`` ‚ğ’Ç‰Á‚·‚éB
-### è‡4
-UE ƒvƒƒWƒFƒNƒg‚Ìu**.uproject**vƒtƒ@ƒCƒ‹“à‚Ìu**Modules**v‚ÉˆÈ‰º‚ÌƒR[ƒh‚ğ’Ç‰Á‚·‚éB
+			- **_Show Comment Bubble when Zoomed Out_**ï¼š**_true_**
+# ä½¿ç”¨æ–¹æ³•
+## ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ
+### æ‰‹é †1
+ã€Œ**Releases**ã€ã‹ã‚‰æœ€æ–°ç‰ˆï¼ˆ**Latest**ï¼‰ã®ã€Œ**Source code**ã€ã‚’ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã€‚
+### æ‰‹é †2
+ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã—ãŸ ZIP ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å±•é–‹ã—ã¦ UE ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ã‚ã‚‹ã€Œ**Source**ã€ãƒ•ã‚©ãƒ«ãƒ€å†…ã«ç§»å‹•ã•ã›ã‚‹ã€‚
+## ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
+### æ‰‹é †3
+ã€Œ**{ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå}Editor.Target.cs**ã€ã« ``ExtraModuleNames.Add("TsubasamusuUnrealEditor");`` ã‚’è¿½åŠ ã™ã‚‹ã€‚
+### æ‰‹é †4
+UE ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®ã€Œ**.uproject**ã€ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®ã€Œ**Modules**ã€ã«ä»¥ä¸‹ã®ã‚³ãƒ¼ãƒ‰ã‚’è¿½åŠ ã™ã‚‹ã€‚
 ```json
 {
 	"Name": "TsubasamusuUnrealEditor",
@@ -41,8 +41,14 @@ UE ƒvƒƒWƒFƒNƒg‚Ìu**.uproject**vƒtƒ@ƒCƒ‹“à‚Ìu**Modules**v‚ÉˆÈ‰º‚ÌƒR[ƒh‚ğ’Ç‰
 	"LoadingPhase": "Default"
 }
 ```
-## ƒfƒoƒbƒO
-### è‡5
-UE ƒGƒfƒBƒ^‚ğ•Â‚¶‚Ä‚¢‚éó‘Ô‚Åƒrƒ‹ƒh‚µAƒrƒ‹ƒhŠ®—¹Œã‚É UE ƒGƒfƒBƒ^‚ğŠJ‚­B
-### è‡6
-u**Edit** „ **Editor Preferences...**v‚ÅŠY“–İ’è‚ª•Ï‚í‚Á‚Ä‚¢‚é–‚ğŠm”F‚·‚éB
+### æ‰‹é †5
+UE ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ã‚ã‚‹ã€Œ**Config**ã€ãƒ•ã‚©ãƒ«ãƒ€ã®ã€Œ**DefaultEngine.ini**ã€ã«ä»¥ä¸‹ã®ã‚³ãƒ¼ãƒ‰ã‚’è¿½åŠ ã™ã‚‹ã€‚
+```
+[/Script/Engine.Engine]
+UnrealEdEngine=/Script/TsubasamusuUnrealEditor.TsubasamusuUnrealEdEngine
+```
+## ãƒ‡ãƒãƒƒã‚°
+### æ‰‹é †6
+UE ã‚¨ãƒ‡ã‚£ã‚¿ã‚’é–‰ã˜ã¦ã„ã‚‹çŠ¶æ…‹ã§ãƒ“ãƒ«ãƒ‰ã—ã€ãƒ“ãƒ«ãƒ‰å®Œäº†å¾Œã« UE ã‚¨ãƒ‡ã‚£ã‚¿ã‚’é–‹ãã€‚
+### æ‰‹é †7
+ã€Œ**Edit** ï¼ **Editor Preferences...**ã€ã§è©²å½“è¨­å®šãŒå¤‰ã‚ã£ã¦ã„ã‚‹äº‹ã‚’ç¢ºèªã™ã‚‹ã€‚
