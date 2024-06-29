@@ -23,6 +23,8 @@
 			- **_Default Comment Node Title Color_**：**_black_**
 		- Comment Nodes
 			- **_Show Comment Bubble when Zoomed Out_**：**_true_**
+## マテリアルインスタンスダイナミックを基にしたマテリアルインスタンスのアセットの作成
+![スクリーンショット 2024-06-30 065628](https://github.com/tsubasamusu/TsubasamusuUnrealEditor/assets/106749709/5f5ce97f-a6e6-4e6e-91f3-ac9bd0165a89)
 # 使用方法
 ## ソースコードのインポート
 ### 手順1
