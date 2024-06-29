@@ -1,8 +1,5 @@
 # 機能
 ## エディタ設定の自動化
-以下の設定項目を自動で変更します。
-好みに合わない設定がある場合は ``UTsubasamusuUnrealEdEngine::SetupEditorSettings()`` を編集して頂ければと思います。
-
 - General
 	- Appearance
 		- User Interface
@@ -25,6 +22,8 @@
 			- **_Show Comment Bubble when Zoomed Out_**：**_true_**
 ## マテリアルインスタンスダイナミックを基にしたマテリアルインスタンスのアセットの作成
 ![スクリーンショット 2024-06-30 065628](https://github.com/tsubasamusu/TsubasamusuUnrealEditor/assets/106749709/5f5ce97f-a6e6-4e6e-91f3-ac9bd0165a89)
+## 指定したアセットの参照の任意のアセットへの置換
+![スクリーンショット 2024-06-30 074857](https://github.com/tsubasamusu/TsubasamusuUnrealEditor/assets/106749709/1a6f1fd2-905b-4b03-a014-0d7737a3bf10)
 # 使用方法
 ## ソースコードのインポート
 ### 手順1
