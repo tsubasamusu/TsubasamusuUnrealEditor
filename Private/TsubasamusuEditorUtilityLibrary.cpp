@@ -1,6 +1,8 @@
 #include "TsubasamusuEditorUtilityLibrary.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "AssetDeleteModel.h"
+#include "AssetRegistry/AssetRegistryHelpers.h"
 
 UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset(const UMaterialInstanceDynamic* SourceMaterialInstanceDynamic, FString CreateDirectory)
 {
@@ -66,4 +68,32 @@ UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset
     UE_LOG(LogTemp, Error, TEXT("Failed to save the created Package based on \"%s\"."), *SourceMaterialInstanceDynamic->GetName());
 
     return nullptr;
+}
+
+void UTsubasamusuEditorUtilityLibrary::ReplaceReferences(UObject* OldAsset, UObject* NewAsset)
+{
+    TSharedPtr<FAssetDeleteModel> AssetDeleteModel = MakeShareable(new FAssetDeleteModel(TArray<UObject*>({ OldAsset })));
+
+    FAssetData NewAssetData(NewAsset);
+
+    AssetDeleteModel->OnStateChanged().AddLambda([AssetDeleteModel, NewAssetData](FAssetDeleteModel::EState NewState)
+        {
+            AssetDeleteModel->Tick(0.1f);
+
+            if (NewState != FAssetDeleteModel::EState::Finished) return;
+
+            /*if (!AssetDeleteModel->CanReplaceReferencesWith(NewAssetData))
+            {
+                UE_LOG(LogTemp, Error, TEXT("You cannot replace references to \"%s\"."), *NewAssetData.GetAsset()->GetName());
+
+                return;
+            }*/
+
+            bool bSuccess = AssetDeleteModel->DoReplaceReferences(NewAssetData);
+
+            if (!bSuccess) UE_LOG(LogTemp, Error, TEXT("Failed to replace references to \"%s\"."), *NewAssetData.GetAsset()->GetName());
+        });
+
+    //Scan again after a certain time.
+    AssetDeleteModel->Tick(0.1f);
 }
