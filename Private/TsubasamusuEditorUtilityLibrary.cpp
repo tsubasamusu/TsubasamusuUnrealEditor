@@ -72,6 +72,20 @@ UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset
 
 void UTsubasamusuEditorUtilityLibrary::ReplaceReferences(UObject* OldAsset, UObject* NewAsset)
 {
+    if (OldAsset == nullptr)
+    {
+        UE_LOG(LogTemp, Error, TEXT("The \"OldAsset\" is nullptr."));
+
+        return;
+    }
+
+    if (NewAsset == nullptr)
+    {
+        UE_LOG(LogTemp, Error, TEXT("The \"NewAsset\" is nullptr."));
+
+        return;
+    }
+
     TSharedPtr<FAssetDeleteModel> AssetDeleteModel = MakeShareable(new FAssetDeleteModel(TArray<UObject*>({ OldAsset })));
 
     FAssetData NewAssetData(NewAsset);
