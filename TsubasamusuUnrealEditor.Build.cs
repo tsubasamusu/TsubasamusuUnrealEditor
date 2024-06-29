@@ -19,7 +19,9 @@ public class TsubasamusuUnrealEditor : ModuleRules
             {
                 "UnrealEd",
                 "GraphEditor",
-                "InternationalizationSettings"
+                "InternationalizationSettings",
+                "Blutility",
+                "AssetRegistry"
             });
     }
 }
