@@ -22,6 +22,13 @@ UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset
 
     CreateDirectory.Append(SourceMaterialInstanceDynamic->GetName());
 
+    if (StaticLoadObject(UObject::StaticClass(), nullptr, *CreateDirectory) != nullptr)
+    {
+        UE_LOG(LogTemp, Error, TEXT("\"%s\" already exists."), *CreateDirectory);
+
+        return nullptr;
+    }
+
     UPackage* Package = CreatePackage(*CreateDirectory);
 
     if (Package == nullptr)
