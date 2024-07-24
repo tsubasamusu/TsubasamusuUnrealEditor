@@ -4,55 +4,57 @@
 #include "AssetDeleteModel.h"
 #include "AssetRegistry/AssetRegistryHelpers.h"
 
-UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset(const UMaterialInstanceDynamic* SourceMaterialInstanceDynamic, FString CreateDirectory)
+UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset(const UMaterialInstanceDynamic* SourceMaterialInstanceDynamic, const FString& CreateDirectory)
 {
-    if (SourceMaterialInstanceDynamic == nullptr)
+    if (!IsValid(SourceMaterialInstanceDynamic))
     {
-        UE_LOG(LogTemp, Error, TEXT("The \"SourceMaterialInstanceDynamic\" is nullptr."));
+        UE_LOG(LogTemp, Error, TEXT("The \"SourceMaterialInstanceDynamic\" is not valid."));
 
         return nullptr;
     }
 
     if (!CreateDirectory.StartsWith(TEXT("/Game/")))
     {
-        UE_LOG(LogTemp, Error, TEXT("The \"CreateDirectory\" does not start with \"/Game/\". The value of \"CreateDirectory\" is \"%s\"."), *CreateDirectory);
+        UE_LOG(LogTemp, Error, TEXT("The \"CreateDirectory\" does not start with \"/Game/\". The entered value is \"%s\"."), *CreateDirectory);
 
         return nullptr;
     }
 
-    if (!CreateDirectory.EndsWith(TEXT("/"))) CreateDirectory.Append(TEXT("/"));
+    TUniquePtr<FString> CreateDirectoryPtr = MakeUnique<FString>(CreateDirectory);
 
-    CreateDirectory.Append(SourceMaterialInstanceDynamic->GetName());
+    if (!CreateDirectoryPtr->EndsWith(TEXT("/"))) CreateDirectoryPtr->Append(TEXT("/"));
 
-    if (StaticLoadObject(UObject::StaticClass(), nullptr, *CreateDirectory) != nullptr)
+    CreateDirectoryPtr->Append(SourceMaterialInstanceDynamic->GetName());
+
+    if (IsValid(StaticLoadObject(UObject::StaticClass(), nullptr, **CreateDirectoryPtr)))
     {
-        UE_LOG(LogTemp, Error, TEXT("\"%s\" already exists."), *CreateDirectory);
+        UE_LOG(LogTemp, Error, TEXT("\"%s\" already exists."), **CreateDirectoryPtr);
 
         return nullptr;
     }
 
-    UPackage* Package = CreatePackage(*CreateDirectory);
+    TObjectPtr<UPackage> Package = CreatePackage(**CreateDirectoryPtr);
 
-    if (Package == nullptr)
+    if (!IsValid(Package))
     {
         UE_LOG(LogTemp, Error, TEXT("Failed to create a Package named \"%s\"."), *SourceMaterialInstanceDynamic->GetName());
-
+    
         return nullptr;
     }
 
-    FString MaterialInstanceName = SourceMaterialInstanceDynamic->GetName();
+    TUniquePtr<FString> MaterialInstanceName = MakeUnique<FString>(SourceMaterialInstanceDynamic->GetName());
 
-    UMaterialInstanceConstant* MaterialInstanceConstant = NewObject<UMaterialInstanceConstant>(Package, FName(*MaterialInstanceName), RF_Public | RF_Standalone);
+    TObjectPtr<UMaterialInstanceConstant> MaterialInstanceConstant = NewObject<UMaterialInstanceConstant>(Package, FName(**MaterialInstanceName), RF_Public | RF_Standalone);
 
-    if (MaterialInstanceConstant == nullptr)
+    if (!IsValid(MaterialInstanceConstant))
     {
-        UE_LOG(LogTemp, Error, TEXT("Failed to create a MaterialInstanceConstant based on \"%s\"."), *SourceMaterialInstanceDynamic->GetName());
-
+        UE_LOG(LogTemp, Error, TEXT("Failed to create a UMaterialInstanceConstant based on \"%s\"."), *SourceMaterialInstanceDynamic->GetName());
+    
         return nullptr;
     }
 
     MaterialInstanceConstant->SetParentEditorOnly(SourceMaterialInstanceDynamic->Parent);
-
+    
     MaterialInstanceConstant->ScalarParameterValues = SourceMaterialInstanceDynamic->ScalarParameterValues;
     MaterialInstanceConstant->VectorParameterValues = SourceMaterialInstanceDynamic->VectorParameterValues;
     MaterialInstanceConstant->TextureParameterValues = SourceMaterialInstanceDynamic->TextureParameterValues;
@@ -61,9 +63,9 @@ UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset
 
     MaterialInstanceConstant->MarkPackageDirty();
 
-    bool bSaved = UPackage::SavePackage(Package, MaterialInstanceConstant, EObjectFlags::RF_Public | EObjectFlags::RF_Standalone, *FPackageName::LongPackageNameToFilename(CreateDirectory, FPackageName::GetAssetPackageExtension()));
+    TUniquePtr<bool> bSaved = MakeUnique<bool>(UPackage::SavePackage(Package, MaterialInstanceConstant, EObjectFlags::RF_Public | EObjectFlags::RF_Standalone, *FPackageName::LongPackageNameToFilename(*CreateDirectoryPtr, FPackageName::GetAssetPackageExtension())));
 
-    if (bSaved) return Cast<UMaterialInstance>(MaterialInstanceConstant);
+    if (bSaved.IsValid() && *bSaved) return Cast<UMaterialInstance>(MaterialInstanceConstant);
 
     UE_LOG(LogTemp, Error, TEXT("Failed to save the created Package based on \"%s\"."), *SourceMaterialInstanceDynamic->GetName());
 
@@ -72,42 +74,38 @@ UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset
 
 void UTsubasamusuEditorUtilityLibrary::ReplaceReferences(UObject* OldAsset, UObject* NewAsset)
 {
-    if (OldAsset == nullptr)
+    if (!IsValid(OldAsset))
     {
-        UE_LOG(LogTemp, Error, TEXT("The \"OldAsset\" is nullptr."));
+        UE_LOG(LogTemp, Error, TEXT("The \"OldAsset\" is not valid."));
 
         return;
     }
 
-    if (NewAsset == nullptr)
+    if (!IsValid(NewAsset))
     {
-        UE_LOG(LogTemp, Error, TEXT("The \"NewAsset\" is nullptr."));
+        UE_LOG(LogTemp, Error, TEXT("The \"NewAsset\" is not valid."));
 
         return;
     }
 
-    TSharedPtr<FAssetDeleteModel> AssetDeleteModel = MakeShareable(new FAssetDeleteModel(TArray<UObject*>({ OldAsset })));
+    const TSharedRef<float> ScanSpan = MakeShared<float>(0.1f);
 
-    FAssetData NewAssetData(NewAsset);
+    TSharedRef<FAssetDeleteModel> AssetDeleteModel = MakeShared<FAssetDeleteModel>((TArray<UObject*>({ OldAsset })));
 
-    AssetDeleteModel->OnStateChanged().AddLambda([AssetDeleteModel, NewAssetData](FAssetDeleteModel::EState NewState)
+    TSharedRef<FAssetData> NewAssetData = MakeShared<FAssetData>(NewAsset);
+
+    AssetDeleteModel->OnStateChanged().AddLambda([AssetDeleteModel, ScanSpan, NewAssetData](FAssetDeleteModel::EState NewState)
         {
-            AssetDeleteModel->Tick(0.1f);
+            AssetDeleteModel->Tick(*ScanSpan);
 
             if (NewState != FAssetDeleteModel::EState::Finished) return;
 
-            /*if (!AssetDeleteModel->CanReplaceReferencesWith(NewAssetData))
-            {
-                UE_LOG(LogTemp, Error, TEXT("You cannot replace references to \"%s\"."), *NewAssetData.GetAsset()->GetName());
+            //if (!AssetDeleteModel->CanReplaceReferencesWith(*NewAssetData)) return;
 
-                return;
-            }*/
+            const TUniquePtr<bool> bSuccess = MakeUnique<bool>(AssetDeleteModel->DoReplaceReferences(*NewAssetData));
 
-            bool bSuccess = AssetDeleteModel->DoReplaceReferences(NewAssetData);
-
-            if (!bSuccess) UE_LOG(LogTemp, Error, TEXT("Failed to replace references to \"%s\"."), *NewAssetData.GetAsset()->GetName());
+            if (!bSuccess.IsValid() || !*bSuccess) UE_LOG(LogTemp, Error, TEXT("Failed to replace references to \"%s\"."), *NewAssetData->GetAsset()->GetName());
         });
 
-    //Scan again after a certain time.
-    AssetDeleteModel->Tick(0.1f);
+    AssetDeleteModel->Tick(*ScanSpan);
 }
