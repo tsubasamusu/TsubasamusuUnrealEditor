@@ -26,7 +26,7 @@ void UTsubasamusuUnrealEdEngine::SetupEditorSettings()
 
 void UTsubasamusuUnrealEdEngine::SetupCommentSettings()
 {
-	UGraphEditorSettings* GraphEditorSettings = GetMutableDefault<UGraphEditorSettings>();
+	TObjectPtr<UGraphEditorSettings> GraphEditorSettings = GetMutableDefault<UGraphEditorSettings>();
 
 	GraphEditorSettings->bShowCommentBubbleWhenZoomedOut = true;
 
@@ -35,11 +35,12 @@ void UTsubasamusuUnrealEdEngine::SetupCommentSettings()
 
 void UTsubasamusuUnrealEdEngine::SetupRegionAndLanguageSettings()
 {
-	TWeakObjectPtr<UInternationalizationSettingsModel> InternationalizationSettingsModel = GetMutableDefault<UInternationalizationSettingsModel>();
+	TObjectPtr<UInternationalizationSettingsModel> InternationalizationSettingsModel = GetMutableDefault<UInternationalizationSettingsModel>();
 
 	{
 		FInternationalization* Internationalization = &FInternationalization::Get();
 
+		// FCulturePtr is a TSharedPtr.
 		FCulturePtr CulturePtr = Internationalization->GetCulture(TEXT("en"));
 
 		InternationalizationSettingsModel->SetEditorLanguage(CulturePtr->GetName());
