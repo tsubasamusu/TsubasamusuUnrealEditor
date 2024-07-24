@@ -11,7 +11,7 @@ class TSUBASAMUSUUNREALEDITOR_API UTsubasamusuEditorUtilityLibrary : public UEdi
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "TSUBASAMUSU|EditorUtility", meta = (KeyWords = "create material instance asset"))
-	static UMaterialInstance* CreateMaterialInstanceAsset(const UMaterialInstanceDynamic* SourceMaterialInstanceDynamic, FString CreateDirectory);
+	static UMaterialInstance* CreateMaterialInstanceAsset(const UMaterialInstanceDynamic* SourceMaterialInstanceDynamic, const FString& CreateDirectory);
 
 	UFUNCTION(BlueprintCallable, Category = "TSUBASAMUSU|EditorUtility", meta = (KeyWords = "replace references"))
 	static void ReplaceReferences(UObject* OldAsset, UObject* NewAsset);
