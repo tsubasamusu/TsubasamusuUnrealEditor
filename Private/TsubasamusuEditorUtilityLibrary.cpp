@@ -96,15 +96,16 @@ void UTsubasamusuEditorUtilityLibrary::ReplaceReferences(UObject* OldAsset, UObj
 
     AssetDeleteModel->OnStateChanged().AddLambda([AssetDeleteModel, ScanSpan, NewAssetData](FAssetDeleteModel::EState NewState)
         {
-            AssetDeleteModel->Tick(*ScanSpan);
+            if (NewState != FAssetDeleteModel::EState::Finished)
+            {
+                AssetDeleteModel->Tick(*ScanSpan);
 
-            if (NewState != FAssetDeleteModel::EState::Finished) return;
+                return;
+            }
 
-            //if (!AssetDeleteModel->CanReplaceReferencesWith(*NewAssetData)) return;
+            const TSharedRef<bool> bSuccess = MakeShared<bool>(AssetDeleteModel->DoReplaceReferences(*NewAssetData));
 
-            const TUniquePtr<bool> bSuccess = MakeUnique<bool>(AssetDeleteModel->DoReplaceReferences(*NewAssetData));
-
-            if (!bSuccess.IsValid() || !*bSuccess) UE_LOG(LogTemp, Error, TEXT("Failed to replace references to \"%s\"."), *NewAssetData->GetAsset()->GetName());
+            if (!*bSuccess) UE_LOG(LogTemp, Error, TEXT("Failed to replace references to \"%s\"."), *NewAssetData->GetAsset()->GetName());
         });
 
     AssetDeleteModel->Tick(*ScanSpan);
