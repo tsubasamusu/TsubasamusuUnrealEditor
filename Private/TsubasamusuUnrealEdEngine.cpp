@@ -2,55 +2,58 @@
 #include "Settings/EditorStyleSettings.h"
 #include "GraphEditorSettings.h"
 #include "InternationalizationSettingsModel.h"
-#include "Internationalization/CulturePointer.h"
 #include "Internationalization/Internationalization.h"
 #include "Internationalization/Culture.h"
 
 void UTsubasamusuUnrealEdEngine::Init(IEngineLoop* InEngineLoop)
 {
-	Super::Init(InEngineLoop);
+    Super::Init(InEngineLoop);
 
-	SetupEditorSettings();
+    SetupEditorSettings();
 }
 
 void UTsubasamusuUnrealEdEngine::SetupEditorSettings()
 {
-	GetMutableDefault<UEditorLoadingSavingSettings>()->bAutoSaveEnable = false;
+    UEditorLoadingSavingSettings* EditorSettings = GetMutableDefault<UEditorLoadingSavingSettings>();
 
-	GetMutableDefault<UEditorStyleSettings>()->AssetEditorOpenLocation = EAssetEditorOpenLocation::MainWindow;
+    EditorSettings->bAutoSaveEnable = false;
 
-	SetupCommentSettings();
+    UEditorStyleSettings* StyleSettings = GetMutableDefault<UEditorStyleSettings>();
 
-	SetupRegionAndLanguageSettings();
+    StyleSettings->AssetEditorOpenLocation = EAssetEditorOpenLocation::MainWindow;
+
+    SetupCommentSettings();
+
+    SetupRegionAndLanguageSettings();
 }
 
 void UTsubasamusuUnrealEdEngine::SetupCommentSettings()
 {
-	TObjectPtr<UGraphEditorSettings> GraphEditorSettings = GetMutableDefault<UGraphEditorSettings>();
+    UGraphEditorSettings* GraphEditorSettings = GetMutableDefault<UGraphEditorSettings>();
 
-	GraphEditorSettings->bShowCommentBubbleWhenZoomedOut = true;
+    GraphEditorSettings->bShowCommentBubbleWhenZoomedOut = true;
 
-	GraphEditorSettings->DefaultCommentNodeTitleColor = FLinearColor::Black;
+    GraphEditorSettings->DefaultCommentNodeTitleColor = FLinearColor::Black;
 }
 
 void UTsubasamusuUnrealEdEngine::SetupRegionAndLanguageSettings()
 {
-	TObjectPtr<UInternationalizationSettingsModel> InternationalizationSettingsModel = GetMutableDefault<UInternationalizationSettingsModel>();
+    UInternationalizationSettingsModel* InternationalizationSettingsModel = GetMutableDefault<UInternationalizationSettingsModel>();
 
-	{
-		FInternationalization* Internationalization = &FInternationalization::Get();
+    FInternationalization& Internationalization = FInternationalization::Get();
 
-		// FCulturePtr is a TSharedPtr.
-		FCulturePtr CulturePtr = Internationalization->GetCulture(TEXT("en"));
+    FCulturePtr CulturePtr = Internationalization.GetCulture(TEXT("en"));
 
-		InternationalizationSettingsModel->SetEditorLanguage(CulturePtr->GetName());
+    if (!CulturePtr.IsValid())
+    {
+        UE_LOG(LogTemp, Error, TEXT("Failed to retrieve culture for 'en'."));
 
-		InternationalizationSettingsModel->SetEditorLocale(CulturePtr->GetName());
-	}
+        return;
+    }
 
-	InternationalizationSettingsModel->SetShouldUseLocalizedNodeAndPinNames(false);
-
-	InternationalizationSettingsModel->SetShouldUseLocalizedNumericInput(false);
-
-	InternationalizationSettingsModel->SetShouldUseLocalizedPropertyNames(false);
+    InternationalizationSettingsModel->SetEditorLanguage(CulturePtr->GetName());
+    InternationalizationSettingsModel->SetEditorLocale(CulturePtr->GetName());
+    InternationalizationSettingsModel->SetShouldUseLocalizedNodeAndPinNames(false);
+    InternationalizationSettingsModel->SetShouldUseLocalizedNumericInput(false);
+    InternationalizationSettingsModel->SetShouldUseLocalizedPropertyNames(false);
 }
