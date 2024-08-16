@@ -82,25 +82,25 @@ void UTsubasamusuEditorUtilityLibrary::ReplaceReferences(UObject* OldAsset, UObj
         return;
     }
 
-    const TSharedRef<float> ScanSpan = MakeShared<float>(0.1f);
+    float ScanSpan = 0.1f;
 
-    TSharedRef<FAssetDeleteModel> AssetDeleteModel = MakeShared<FAssetDeleteModel>((TArray<UObject*>({ OldAsset })));
+    TSharedPtr<FAssetDeleteModel> AssetDeleteModel = MakeShared<FAssetDeleteModel>(TArray<UObject*>({ OldAsset }));
 
-    TSharedRef<FAssetData> NewAssetData = MakeShared<FAssetData>(NewAsset);
+    TSharedPtr<FAssetData> NewAssetData = MakeShared<FAssetData>(NewAsset);
 
     AssetDeleteModel->OnStateChanged().AddLambda([AssetDeleteModel, ScanSpan, NewAssetData](FAssetDeleteModel::EState NewState)
         {
             if (NewState != FAssetDeleteModel::EState::Finished)
             {
-                AssetDeleteModel->Tick(*ScanSpan);
+                AssetDeleteModel->Tick(ScanSpan);
 
                 return;
             }
 
-            const TSharedRef<bool> bSuccess = MakeShared<bool>(AssetDeleteModel->DoReplaceReferences(*NewAssetData));
+            bool bSuccess = AssetDeleteModel->DoReplaceReferences(*NewAssetData);
 
-            if (!*bSuccess) UE_LOG(LogTemp, Error, TEXT("Failed to replace references to \"%s\"."), *NewAssetData->GetAsset()->GetName());
+            if (!bSuccess) UE_LOG(LogTemp, Error, TEXT("Failed to replace references to \"%s\"."), *NewAssetData->GetAsset()->GetName());
         });
 
-    AssetDeleteModel->Tick(*ScanSpan);
+    AssetDeleteModel->Tick(ScanSpan);
 }
