@@ -22,9 +22,9 @@
 			- **_Show Comment Bubble when Zoomed Out_**：**_true_**
 # EditorUtility で使用可能なノード
 ## 受けった ``UMaterialInstanceDynamic`` を基にして ``UMaterialInstance`` のアセットを作成する
-![スクリーンショット 2024-06-30 065628](https://github.com/tsubasamusu/TsubasamusuUnrealEditor/assets/106749709/5f5ce97f-a6e6-4e6e-91f3-ac9bd0165a89)
+![image](https://github.com/user-attachments/assets/c450cfae-9da5-4bca-83d2-4106a2666e56)
 ## 指定したアセット（``OldAsset``）の参照を別の任意のアセット（``NewAsset``）へ置換する
-![スクリーンショット 2024-06-30 074857](https://github.com/tsubasamusu/TsubasamusuUnrealEditor/assets/106749709/1a6f1fd2-905b-4b03-a014-0d7737a3bf10)
+![image](https://github.com/user-attachments/assets/af7a7331-6681-41fe-baa4-f598877c3aca)
 # 使用方法
 ## ソースコードのインポート
 ### 手順1
