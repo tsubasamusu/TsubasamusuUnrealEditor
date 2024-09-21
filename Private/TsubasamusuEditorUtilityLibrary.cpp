@@ -3,6 +3,7 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "AssetDeleteModel.h"
 #include "AssetRegistry/AssetRegistryHelpers.h"
+#include "UObject/SavePackage.h"
 
 UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset(const UMaterialInstanceDynamic* SourceMaterialInstanceDynamic, const FString CreateDirectory)
 {
@@ -57,7 +58,17 @@ UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset
 
     MaterialInstanceConstant->MarkPackageDirty();
 
-    const bool bSaved = UPackage::SavePackage(Package, MaterialInstanceConstant, EObjectFlags::RF_Public | EObjectFlags::RF_Standalone, *FPackageName::LongPackageNameToFilename(FinalDirectory, FPackageName::GetAssetPackageExtension()));
+    FSavePackageArgs SavePackageArgs;
+
+    SavePackageArgs.TopLevelFlags = EObjectFlags::RF_Public | EObjectFlags::RF_Standalone;
+
+    SavePackageArgs.Error = GError;
+
+    SavePackageArgs.bForceByteSwapping = true;
+
+    SavePackageArgs.SaveFlags = SAVE_NoError;
+
+    const bool bSaved = UPackage::SavePackage(Package, MaterialInstanceConstant, *FPackageName::LongPackageNameToFilename(FinalDirectory, FPackageName::GetAssetPackageExtension()), SavePackageArgs);
 
     if (bSaved) return Cast<UMaterialInstance>(MaterialInstanceConstant);
 
