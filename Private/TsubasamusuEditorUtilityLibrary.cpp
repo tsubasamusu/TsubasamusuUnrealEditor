@@ -58,21 +58,13 @@ UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset
 
     MaterialInstanceConstant->MarkPackageDirty();
 
-    FSavePackageArgs SavePackageArgs;
+    FString FileName = FPackageName::LongPackageNameToFilename(FinalDirectory, FPackageName::GetAssetPackageExtension());
 
-    SavePackageArgs.TopLevelFlags = EObjectFlags::RF_Public | EObjectFlags::RF_Standalone;
-
-    SavePackageArgs.Error = GError;
-
-    SavePackageArgs.bForceByteSwapping = true;
-
-    SavePackageArgs.SaveFlags = SAVE_NoError;
-
-    const bool bSaved = UPackage::SavePackage(Package, MaterialInstanceConstant, *FPackageName::LongPackageNameToFilename(FinalDirectory, FPackageName::GetAssetPackageExtension()), SavePackageArgs);
+    const bool bSaved = SavePackage(Package, MaterialInstanceConstant, FileName);
 
     if (bSaved) return Cast<UMaterialInstance>(MaterialInstanceConstant);
 
-    UE_LOG(LogTemp, Error, TEXT("Failed to save the created Package based on \"%s\"."), *SourceMaterialInstanceDynamic->GetName());
+    UE_LOG(LogTemp, Error, TEXT("Failed to save the created UPackage based on \"%s\"."), *SourceMaterialInstanceDynamic->GetName());
 
     return nullptr;
 }
@@ -114,4 +106,19 @@ void UTsubasamusuEditorUtilityLibrary::ReplaceReferences(UObject* OldAsset, UObj
         });
 
     AssetDeleteModel->Tick(ScanSpan);
+}
+
+bool UTsubasamusuEditorUtilityLibrary::SavePackage(UPackage* Package, UObject* Asset, FString& FileName)
+{
+    FSavePackageArgs SavePackageArgs;
+
+    SavePackageArgs.TopLevelFlags = EObjectFlags::RF_Public | EObjectFlags::RF_Standalone;
+
+    SavePackageArgs.Error = GError;
+
+    SavePackageArgs.bForceByteSwapping = true;
+
+    SavePackageArgs.SaveFlags = SAVE_NoError;
+
+    return UPackage::SavePackage(Package, Asset, *FileName, SavePackageArgs);
 }

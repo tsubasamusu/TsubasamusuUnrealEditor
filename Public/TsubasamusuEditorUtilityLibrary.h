@@ -15,4 +15,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "TSUBASAMUSU|EditorUtility")
 	static void ReplaceReferences(UObject* OldAsset, UObject* NewAsset);
+
+private:
+	static bool SavePackage(UPackage* Package, UObject* Asset, FString& FileName);
 };
