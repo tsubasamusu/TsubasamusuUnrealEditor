@@ -33,7 +33,6 @@ void UTsubasamusuUnrealEdEngine::SetupGraphEditorSettings()
     UGraphEditorSettings* GraphEditorSettings = GetMutableDefault<UGraphEditorSettings>();
 
     GraphEditorSettings->bShowCommentBubbleWhenZoomedOut = true;
-
     GraphEditorSettings->DefaultCommentNodeTitleColor = FLinearColor::Black;
 }
 
@@ -41,12 +40,8 @@ void UTsubasamusuUnrealEdEngine::SetupInternationalizationSettings()
 {
     UInternationalizationSettingsModel* InternationalizationSettingsModel = GetMutableDefault<UInternationalizationSettingsModel>();
 
-    //FInternationalization& Internationalization = FInternationalization::Get();
+    FInternationalization::Get().SetCurrentCulture(TEXT("en"));
 
-    //FCulturePtr EnglishCulturePtr = Internationalization.GetCulture(TEXT("en"));
-
-    //InternationalizationSettingsModel->SetEditorLanguage(EnglishCulturePtr->GetName());
-    //InternationalizationSettingsModel->SetEditorLocale(EnglishCulturePtr->GetName());
     InternationalizationSettingsModel->SetShouldUseLocalizedNodeAndPinNames(false);
     InternationalizationSettingsModel->SetShouldUseLocalizedNumericInput(false);
     InternationalizationSettingsModel->SetShouldUseLocalizedPropertyNames(false);
