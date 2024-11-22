@@ -5,7 +5,7 @@
 #include "AssetRegistry/AssetRegistryHelpers.h"
 #include "UObject/SavePackage.h"
 
-UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset(const UMaterialInstanceDynamic* SourceMaterialInstanceDynamic, const FString CreateDirectory)
+UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset(UMaterialInstanceDynamic* SourceMaterialInstanceDynamic, const FString& CreateDirectory)
 {
     if (!IsValid(SourceMaterialInstanceDynamic))
     {
@@ -108,16 +108,13 @@ void UTsubasamusuEditorUtilityLibrary::ReplaceReferences(UObject* OldAsset, UObj
     AssetDeleteModel->Tick(ScanSpan);
 }
 
-bool UTsubasamusuEditorUtilityLibrary::SavePackage(UPackage* Package, UObject* Asset, FString& FileName)
+bool UTsubasamusuEditorUtilityLibrary::SavePackage(UPackage* Package, UObject* Asset, const FString& FileName)
 {
     FSavePackageArgs SavePackageArgs;
 
     SavePackageArgs.TopLevelFlags = EObjectFlags::RF_Public | EObjectFlags::RF_Standalone;
-
     SavePackageArgs.Error = GError;
-
     SavePackageArgs.bForceByteSwapping = true;
-
     SavePackageArgs.SaveFlags = SAVE_NoError;
 
     return UPackage::SavePackage(Package, Asset, *FileName, SavePackageArgs);

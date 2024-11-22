@@ -11,11 +11,11 @@ class TSUBASAMUSUUNREALEDITOR_API UTsubasamusuEditorUtilityLibrary : public UEdi
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "TSUBASAMUSU|EditorUtility")
-	static UMaterialInstance* CreateMaterialInstanceAsset(const UMaterialInstanceDynamic* SourceMaterialInstanceDynamic, const FString CreateDirectory);
+	static UMaterialInstance* CreateMaterialInstanceAsset(UMaterialInstanceDynamic* SourceMaterialInstanceDynamic, const FString& CreateDirectory);
 
 	UFUNCTION(BlueprintCallable, Category = "TSUBASAMUSU|EditorUtility")
 	static void ReplaceReferences(UObject* OldAsset, UObject* NewAsset);
 
 private:
-	static bool SavePackage(UPackage* Package, UObject* Asset, FString& FileName);
+	static bool SavePackage(UPackage* Package, UObject* Asset, const FString& FileName);
 };
