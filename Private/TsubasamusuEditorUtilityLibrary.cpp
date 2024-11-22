@@ -27,13 +27,6 @@ UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset
 
     if(AssetPath.Contains(TEXT("//"))) AssetPath.ReplaceInline(TEXT("//"), TEXT("/"));
 
-    if (AssetExists(AssetPath))
-    {
-        UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Creating a MaterialInstance asset failed because \"%s\" already exists."), *AssetPath);
-
-        return nullptr;
-    }
-
     UPackage* Package = CreatePackage(*AssetPath);
 
     if (!IsValid(Package))
@@ -133,11 +126,4 @@ bool UTsubasamusuEditorUtilityLibrary::SavePackage(UPackage* Package, UObject* A
     SavePackageArgs.SaveFlags = SAVE_NoError;
 
     return UPackage::SavePackage(Package, Asset, *FileName, SavePackageArgs);
-}
-
-bool UTsubasamusuEditorUtilityLibrary::AssetExists(const FString& AssetPath)
-{
-    UObject* LoadedObject = StaticLoadObject(UObject::StaticClass(), nullptr, *AssetPath);
-
-    return IsValid(LoadedObject);
 }

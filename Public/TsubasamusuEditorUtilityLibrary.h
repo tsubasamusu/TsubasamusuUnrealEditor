@@ -18,6 +18,4 @@ public:
 
 private:
 	static bool SavePackage(UPackage* Package, UObject* Asset, const FString& FileName);
-
-	static bool AssetExists(const FString& AssetPath);
 };
