@@ -40,7 +40,7 @@ void UTsubasamusuUnrealEdEngine::SetupInternationalizationSettings()
 {
     UInternationalizationSettingsModel* InternationalizationSettingsModel = GetMutableDefault<UInternationalizationSettingsModel>();
 
-    FInternationalization::Get().SetCurrentCulture(TEXT("en"));
+    FInternationalization::Get().SetCurrentLanguageAndLocale(TEXT("en"));
 
     InternationalizationSettingsModel->SetShouldUseLocalizedNodeAndPinNames(false);
     InternationalizationSettingsModel->SetShouldUseLocalizedNumericInput(false);
