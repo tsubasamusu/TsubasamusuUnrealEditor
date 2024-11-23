@@ -81,14 +81,14 @@ void UTsubasamusuEditorUtilityLibrary::ReplaceReferences(UObject* OldAsset, UObj
 {
     if (!IsValid(OldAsset))
     {
-        UE_LOG(LogTemp, Error, TEXT("The \"OldAsset\" is not valid."));
+        UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Replacing references failed because the old asset is not valid."));
 
         return;
     }
 
     if (!IsValid(NewAsset))
     {
-        UE_LOG(LogTemp, Error, TEXT("The \"NewAsset\" is not valid."));
+        UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Replacing references failed because the new asset is not valid."));
 
         return;
     }
@@ -108,9 +108,9 @@ void UTsubasamusuEditorUtilityLibrary::ReplaceReferences(UObject* OldAsset, UObj
                 return;
             }
 
-            bool bSuccess = AssetDeleteModel->DoReplaceReferences(*NewAssetData);
+            if (AssetDeleteModel->DoReplaceReferences(*NewAssetData))  return;
 
-            if (!bSuccess) UE_LOG(LogTemp, Error, TEXT("Failed to replace references to \"%s\"."), *NewAssetData->GetAsset()->GetName());
+            UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Failed to replace references."));
         });
 
     AssetDeleteModel->Tick(ScanSpan);
