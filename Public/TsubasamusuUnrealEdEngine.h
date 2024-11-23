@@ -13,7 +13,8 @@ public:
 	void Init(IEngineLoop* InEngineLoop) override;
 
 private:
-	void SetupEditorSettings();
-	void SetupCommentSettings();
-	void SetupRegionAndLanguageSettings();
+	void SetupEditorLoadingSavingSettings();
+	void SetupEditorStyleSettings();
+	void SetupGraphEditorSettings();
+	void SetupInternationalizationSettings();
 };

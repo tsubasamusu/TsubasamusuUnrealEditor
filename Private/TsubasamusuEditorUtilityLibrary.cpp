@@ -5,36 +5,33 @@
 #include "AssetRegistry/AssetRegistryHelpers.h"
 #include "UObject/SavePackage.h"
 
-UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset(const UMaterialInstanceDynamic* SourceMaterialInstanceDynamic, const FString CreateDirectory)
+DEFINE_LOG_CATEGORY_STATIC(LogTsubasamusuUnrealEditor, Error, All);
+
+UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset(UMaterialInstanceDynamic* SourceMaterialInstanceDynamic, const FString& CreateDirectory)
 {
     if (!IsValid(SourceMaterialInstanceDynamic))
     {
-        UE_LOG(LogTemp, Error, TEXT("The \"SourceMaterialInstanceDynamic\" is not valid."));
+        UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Creating a MaterialInstance asset failed because the MaterialInstanceDynamic is not valid."));
 
         return nullptr;
     }
 
     if (!CreateDirectory.StartsWith(TEXT("/Game/")))
     {
-        UE_LOG(LogTemp, Error, TEXT("The \"CreateDirectory\" does not start with \"/Game/\". The entered value is \"%s\"."), *CreateDirectory);
+        UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Creating a MaterialInstance asset failed because the directory string does not start with \"/Game/\"."));
 
         return nullptr;
     }
 
-    FString FinalDirectory = FPaths::Combine(CreateDirectory, SourceMaterialInstanceDynamic->GetName());
+    FString AssetPath = CreateDirectory / SourceMaterialInstanceDynamic->GetName();
 
-    if (IsValid(StaticLoadObject(UObject::StaticClass(), nullptr, *FinalDirectory)))
-    {
-        UE_LOG(LogTemp, Error, TEXT("\"%s\" already exists."), *FinalDirectory);
+    if(AssetPath.Contains(TEXT("//"))) AssetPath.ReplaceInline(TEXT("//"), TEXT("/"));
 
-        return nullptr;
-    }
-
-    UPackage* Package = CreatePackage(*FinalDirectory);
+    UPackage* Package = CreatePackage(*AssetPath);
 
     if (!IsValid(Package))
     {
-        UE_LOG(LogTemp, Error, TEXT("Failed to create a Package named \"%s\"."), *SourceMaterialInstanceDynamic->GetName());
+        UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Creating a MaterialInstance asset failed because creating a Package of \"%s\" failed."), *AssetPath);
 
         return nullptr;
     }
@@ -43,13 +40,12 @@ UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset
 
     if (!IsValid(MaterialInstanceConstant))
     {
-        UE_LOG(LogTemp, Error, TEXT("Failed to create a UMaterialInstanceConstant based on \"%s\"."), *SourceMaterialInstanceDynamic->GetName());
+        UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Creating a MaterialInstance asset failed because creating a MaterialInstanceConstant of \"%s\" failed."), *AssetPath);
 
         return nullptr;
     }
 
     MaterialInstanceConstant->SetParentEditorOnly(SourceMaterialInstanceDynamic->Parent);
-
     MaterialInstanceConstant->ScalarParameterValues = SourceMaterialInstanceDynamic->ScalarParameterValues;
     MaterialInstanceConstant->VectorParameterValues = SourceMaterialInstanceDynamic->VectorParameterValues;
     MaterialInstanceConstant->TextureParameterValues = SourceMaterialInstanceDynamic->TextureParameterValues;
@@ -58,29 +54,41 @@ UMaterialInstance* UTsubasamusuEditorUtilityLibrary::CreateMaterialInstanceAsset
 
     MaterialInstanceConstant->MarkPackageDirty();
 
-    FString FileName = FPackageName::LongPackageNameToFilename(FinalDirectory, FPackageName::GetAssetPackageExtension());
+    FString FileName = FPackageName::LongPackageNameToFilename(AssetPath, FPackageName::GetAssetPackageExtension());
 
-    const bool bSaved = SavePackage(Package, MaterialInstanceConstant, FileName);
+    bool bSaved = SavePackage(Package, MaterialInstanceConstant, FileName);
 
-    if (bSaved) return Cast<UMaterialInstance>(MaterialInstanceConstant);
+    if (!bSaved)
+    {
+        UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Creating a MaterialInstance asset failed because saving a Package of \"%s\" failed."), *AssetPath);
 
-    UE_LOG(LogTemp, Error, TEXT("Failed to save the created UPackage based on \"%s\"."), *SourceMaterialInstanceDynamic->GetName());
+        return nullptr;
+    }
 
-    return nullptr;
+    UMaterialInstance* CreatedMaterialInstance = Cast<UMaterialInstance>(MaterialInstanceConstant);
+
+    if (!IsValid(CreatedMaterialInstance))
+    {
+        UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Creating a MaterialInstance asset failed because the created MaterialInstance is not valid."));
+
+        return nullptr;
+    }
+
+    return CreatedMaterialInstance;
 }
 
 void UTsubasamusuEditorUtilityLibrary::ReplaceReferences(UObject* OldAsset, UObject* NewAsset)
 {
     if (!IsValid(OldAsset))
     {
-        UE_LOG(LogTemp, Error, TEXT("The \"OldAsset\" is not valid."));
+        UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Replacing references failed because the old asset is not valid."));
 
         return;
     }
 
     if (!IsValid(NewAsset))
     {
-        UE_LOG(LogTemp, Error, TEXT("The \"NewAsset\" is not valid."));
+        UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Replacing references failed because the new asset is not valid."));
 
         return;
     }
@@ -100,24 +108,21 @@ void UTsubasamusuEditorUtilityLibrary::ReplaceReferences(UObject* OldAsset, UObj
                 return;
             }
 
-            bool bSuccess = AssetDeleteModel->DoReplaceReferences(*NewAssetData);
+            if (AssetDeleteModel->DoReplaceReferences(*NewAssetData))  return;
 
-            if (!bSuccess) UE_LOG(LogTemp, Error, TEXT("Failed to replace references to \"%s\"."), *NewAssetData->GetAsset()->GetName());
+            UE_LOG(LogTsubasamusuUnrealEditor, Error, TEXT("Failed to replace references."));
         });
 
     AssetDeleteModel->Tick(ScanSpan);
 }
 
-bool UTsubasamusuEditorUtilityLibrary::SavePackage(UPackage* Package, UObject* Asset, FString& FileName)
+bool UTsubasamusuEditorUtilityLibrary::SavePackage(UPackage* Package, UObject* Asset, const FString& FileName)
 {
     FSavePackageArgs SavePackageArgs;
 
     SavePackageArgs.TopLevelFlags = EObjectFlags::RF_Public | EObjectFlags::RF_Standalone;
-
     SavePackageArgs.Error = GError;
-
     SavePackageArgs.bForceByteSwapping = true;
-
     SavePackageArgs.SaveFlags = SAVE_NoError;
 
     return UPackage::SavePackage(Package, Asset, *FileName, SavePackageArgs);

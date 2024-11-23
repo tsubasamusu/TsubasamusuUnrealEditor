@@ -21,21 +21,25 @@
 		- Comment Nodes
 			- **_Show Comment Bubble when Zoomed Out_**：**_true_**
 # EditorUtility で使用可能なノード
-## 受けった ``UMaterialInstanceDynamic`` を基にして ``UMaterialInstance`` のアセットを作成する
-![image](https://github.com/user-attachments/assets/c450cfae-9da5-4bca-83d2-4106a2666e56)
-## 指定したアセット（``OldAsset``）の参照を別の任意のアセット（``NewAsset``）へ置換する
-![image](https://github.com/user-attachments/assets/af7a7331-6681-41fe-baa4-f598877c3aca)
+## MaterialInstanceDynamic を基にして MaterialInstance のアセットを作成する
+
+<img width="500" src="https://github.com/user-attachments/assets/c450cfae-9da5-4bca-83d2-4106a2666e56">
+
+## ``OldAsset`` の参照を ``NewAsset`` に置換する
+
+<img width="500" src="https://github.com/user-attachments/assets/af7a7331-6681-41fe-baa4-f598877c3aca">
+
 # 使用方法
 ## ソースコードのインポート
 ### 手順1
-「**Releases**」から最新版（**Latest**）の「**Source code**」をダウンロードする。
+「Releases」から最新版（Latest）の「Source code」をダウンロードする。
 ### 手順2
-ダウンロードした ZIP ファイルを展開して UE プロジェクトのルートディレクトリにある「**Source**」フォルダ内に移動させる。
+ダウンロードした ZIP ファイルを展開して UE プロジェクトのルートディレクトリにある「Source」フォルダ内に移動させる。
 ## コーディング
 ### 手順3
-「**{プロジェクト名}Editor.Target.cs**」に ``ExtraModuleNames.Add("TsubasamusuUnrealEditor");`` を追加する。
+「{プロジェクト名}Editor.Target.cs」に ``ExtraModuleNames.Add("TsubasamusuUnrealEditor");`` を追加する。
 ### 手順4
-UE プロジェクトの「**.uproject**」ファイル内の「**Modules**」に以下のコードを追加する。
+UE プロジェクトの「.uproject」ファイル内の ``Modules``に以下のコードを追加する。
 ```json
 {
 	"Name": "TsubasamusuUnrealEditor",
@@ -44,7 +48,7 @@ UE プロジェクトの「**.uproject**」ファイル内の「**Modules**」�
 }
 ```
 ### 手順5
-UE プロジェクトのルートディレクトリにある「**Config**」フォルダの「**DefaultEngine.ini**」に以下のコードを追加する。
+UE プロジェクトのルートディレクトリにある「Config」フォルダの「DefaultEngine.ini」に以下のコードを追加する。
 ```
 [/Script/Engine.Engine]
 UnrealEdEngine=/Script/TsubasamusuUnrealEditor.TsubasamusuUnrealEdEngine
@@ -53,4 +57,4 @@ UnrealEdEngine=/Script/TsubasamusuUnrealEditor.TsubasamusuUnrealEdEngine
 ### 手順6
 UE エディタを閉じている状態でビルドし、ビルド完了後に UE エディタを開く。
 ### 手順7
-「**Edit** ＞ **Editor Preferences...**」で該当設定が変わっている事を確認する。
+「Edit ＞ Editor Preferences...」で該当設定が変わっている事を確認する。
